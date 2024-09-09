@@ -122,28 +122,29 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
         isDiscountEditing: false, // Add this field
       },
     ];
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/task/products/search", {
-          headers: {
-            "x-api-key": apiKey,
-          },
-          params: {
-            page: 2,
-          },
-        });
-        if (response.status === 200) {
-          console.log(response.data, "api data");
-          setProducts(response.data);
-        } else {
-          setProducts(sampleProducts);
-        }
-      } catch (error) {
-        console.error(error);
-        setProducts(sampleProducts);
-      }
-    };
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get("/task/products/search", {
+    //       headers: {
+    //         "x-api-key": apiKey,
+    //       },
+    //       params: {
+    //         page: 2,
+    //       },
+    //     });
+    //     if (response.status === 200) {
+    //       console.log(response.data, "api data");
+    //       setProducts(response.data);
+    //     } else {
+    //       setProducts(sampleProducts);
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //     setProducts(sampleProducts);
+    //   }
+    // };
+    // fetchData();
+    setProducts(sampleProducts);
   }, []);
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.toLowerCase());
