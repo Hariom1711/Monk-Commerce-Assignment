@@ -71,7 +71,6 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
               "x-api-key": apiKey,
             },
             params: {
-              // search: "",
               page: 2,
             },
           }
@@ -97,22 +96,22 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
   };
 
   const handleSubmit = () => {
-    const selectedProducts = products.filter((product) =>
+    const selectedProducts = products?.filter((product) =>
       product.variants.some((variant) => selectedVariants[variant.id])
     );
     onProductSelect(selectedProducts);
     onClose();
   };
 
-  const filteredProducts = products.filter(
+  const filteredProducts = products?.filter(
     (product) =>
-      product.title.toLowerCase().includes(searchTerm) ||
-      product.variants.some((variant) =>
-        variant.title.toLowerCase().includes(searchTerm)
+      product?.title.toLowerCase().includes(searchTerm) ||
+      product?.variants.some((variant) =>
+        variant?.title.toLowerCase().includes(searchTerm)
       )
   );
 
-  const selectedCount = Object.values(selectedVariants).filter(Boolean).length;
+  const selectedCount = Object.values(selectedVariants)?.filter(Boolean).length;
 
   return (
     <Dialog onClose={onClose} maxWidth="md" fullWidth open={open}>

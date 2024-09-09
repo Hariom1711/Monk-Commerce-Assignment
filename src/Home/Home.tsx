@@ -100,7 +100,7 @@ const AddProductsPage: React.FC = () => {
   };
 
   const handleRemoveProduct = (productId: string | number) => {
-    setProducts(products.filter((product) => product.id !== productId));
+    setProducts(products?.filter((product) => product.id !== productId));
   };
 
   const handleRemoveVariant = (
@@ -112,7 +112,7 @@ const AddProductsPage: React.FC = () => {
         if (product.id === productId) {
           return {
             ...product,
-            variants: product.variants.filter(
+            variants: product?.variants?.filter(
               (variant) => variant.id !== variantId
             ),
           };
