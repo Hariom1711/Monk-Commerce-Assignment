@@ -13,6 +13,7 @@ import {
   ListItemText,
   Typography,
   Box,
+  Avatar,
 } from "@mui/material";
 import axios from "axios";
 
@@ -63,18 +64,14 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        const response = await axios.get(
-          "/task/products/search",
-          {
-            headers: {
-              "x-api-key": apiKey,
-            },
-            params: {
-              page: 2,
-            },
-          }
-        );
+        const response = await axios.get("/task/products/search", {
+          headers: {
+            "x-api-key": apiKey,
+          },
+          params: {
+            page: 2,
+          },
+        });
         if (response.status === 200) {
           console.log(response.data, "api data");
           setProducts(response.data);
@@ -142,8 +139,19 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
                     }
                   />
                 </ListItemIcon>
-                <ListItemText primary={product.title} />
+                {/* Use MUI's Avatar component for the image */}
+                <Avatar
+                  variant="square"
+                  src={product.image.src}
+                  alt={product.title}
+                  sx={{ width: 50, height: 50, marginRight: 2 }} // Customize the size and margin
+                />
+                <ListItemText
+                  primary={product.title}
+                  primaryTypographyProps={{ style: { fontWeight: "bold" } }}
+                />{" "}
               </ListItem>
+
               <List component="div" disablePadding>
                 {product.variants.map((variant: any) => (
                   <ListItem key={variant.id} sx={{ pl: 4 }}>

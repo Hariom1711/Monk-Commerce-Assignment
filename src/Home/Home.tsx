@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
@@ -11,6 +10,7 @@ import {
   IconButton,
   Card,
   Grid2,
+  Avatar,
 } from "@mui/material";
 import { message } from "antd"; // Import Ant Design message component
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -173,7 +173,12 @@ const AddProductsPage: React.FC = () => {
             <Typography variant="h6" fontWeight={"bold"} gutterBottom>
               Products
             </Typography>
-            <Typography variant="h6" fontWeight={"bold"} gutterBottom justifyContent={"end"}>
+            <Typography
+              variant="h6"
+              fontWeight={"bold"}
+              gutterBottom
+              justifyContent={"end"}
+            >
               Discount
             </Typography>
           </Grid2>
@@ -205,7 +210,10 @@ const AddProductsPage: React.FC = () => {
                           <Box {...provided.dragHandleProps}>
                             <DragIndicatorIcon />
                           </Box>
-                          <Typography sx={{ flexGrow: 1 }}>
+
+                     
+                          {/* <Avatar alt={product?.title} src={product?.image.src} /> */}
+                          <Typography sx={{ flexGrow: 1, fontWeight: "bold" }}>
                             {index + 1}. {product.title}
                           </Typography>
                           {product.isDiscountEditing ? (
@@ -218,7 +226,7 @@ const AddProductsPage: React.FC = () => {
                               }}
                             >
                               <TextField
-                                value={product.discount || 0}
+                                value={product?.discount || 0}
                                 onChange={(e) =>
                                   handleDiscountChange(
                                     product.id,
