@@ -1,11 +1,24 @@
-
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Checkbox, List, ListItem, ListItemIcon, ListItemText, Typography, Box } from '@mui/material';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+  Checkbox,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Box,
+} from "@mui/material";
+import axios from "axios";
 
 interface Variant {
   id: string;
-  product_id:string;
+  product_id: string;
   title: string;
   price: string;
   inventory_quantity: number;
@@ -22,8 +35,8 @@ export interface Product {
   variants: Variant[];
   image: ProductImage;
   discount: number;
-  discountType: 'percentage' | 'fixed';
-  isDiscountEditing:boolean;
+  discountType: "percentage" | "fixed";
+  isDiscountEditing: boolean;
 }
 
 interface ProductPickerProps {
@@ -32,100 +45,71 @@ interface ProductPickerProps {
   onClose: () => void;
 }
 
-const ProductPicker: React.FC<ProductPickerProps> = ({ onProductSelect, open, onClose }) => {
+const ProductPicker: React.FC<ProductPickerProps> = ({
+  onProductSelect,
+  open,
+  onClose,
+}) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProducts, setSelectedProducts] = useState<Record<string, boolean>>({});
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, boolean>>({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProducts, setSelectedProducts] = useState<
+    Record<string, boolean>
+  >({});
+  const [selectedVariants, setSelectedVariants] = useState<
+    Record<string, boolean>
+  >({});
+
+  const apiKey = "72njgfa948d9aS7gs5";
   useEffect(() => {
-    // Simulating API call with sample data
+    const fetchData = async () => {
+      try {
 
-    const sampleProducts: Product[] = [
-      {
-        id: "77",
-        title: "Fog Linen Chambray Towel - Beige Stripe",
-        variants: [
+        const response = await axios.get(
+          "/task/products/search",
           {
-            id: "1",
-            product_id: "77",
-            title: "XS / Silver",
-            price: "49",
-            inventory_quantity: 0,
-          },
-          {
-            id: "2",
-            product_id: "77",
-            title: "S / Silver",
-            price: "49",
-            inventory_quantity: 0,
-          },
-          {
-            id: "3",
-            product_id: "77",
-            title: "M / Silver",
-            price: "49",
-            inventory_quantity: 0,
-          },
-        ],
-        image: {
-          id: "266",
-          product_id: "77",
-          src: "https://cdn11.bigcommerce.com/s-p1xcugzp89/products/77/images/266/foglinenbeigestripetowel1b.1647248662.386.513.jpg?c=1",
-        },
-        discount: 0,
-        discountType: "percentage",
-        price: undefined,
-        isDiscountEditing: false, // Add this field
-      },
-      {
-        id: "80",
-        title: "Orbit Terrarium - Large",
-        variants: [
-          {
-            id: "64",
-            product_id: "80",
-            title: "Default Title",
-            price: "109",
-            inventory_quantity: 0,
-          },
-        ],
-        image: {
-          id: "272",
-          product_id: "80",
-          src: "https://cdn11.bigcommerce.com/s-p1xcugzp89/products/80/images/272/roundterrariumlarge.1647248662.386.513.jpg?c=1",
-        },
-        discount: 0,
-        discountType: "percentage",
-        price: undefined,
-        isDiscountEditing: false, // Add this field
-      },
-    ];
-    
-    setProducts(sampleProducts);
+            headers: {
+              "x-api-key": apiKey,
+            },
+            params: {
+              // search: "",
+              page: 2,
+            },
+          }
+        );
+        if (response.status === 200) {
+          console.log(response.data, "api data");
+          setProducts(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
   }, []);
-
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.toLowerCase());
   };
   const handleVariantSelect = (variantId: string) => {
-    setSelectedVariants(prev => ({
+    setSelectedVariants((prev) => ({
       ...prev,
-      [variantId]: !prev[variantId]
+      [variantId]: !prev[variantId],
     }));
   };
 
   const handleSubmit = () => {
-    const selectedProducts = products.filter(product => 
-      product.variants.some(variant => selectedVariants[variant.id])
+    const selectedProducts = products.filter((product) =>
+      product.variants.some((variant) => selectedVariants[variant.id])
     );
     onProductSelect(selectedProducts);
     onClose();
   };
 
-  const filteredProducts = products.filter(product => 
-    product.title.toLowerCase().includes(searchTerm) ||
-    product.variants.some(variant => variant.title.toLowerCase().includes(searchTerm))
+  const filteredProducts = products.filter(
+    (product) =>
+      product.title.toLowerCase().includes(searchTerm) ||
+      product.variants.some((variant) =>
+        variant.title.toLowerCase().includes(searchTerm)
+      )
   );
 
   const selectedCount = Object.values(selectedVariants).filter(Boolean).length;
@@ -147,15 +131,22 @@ const ProductPicker: React.FC<ProductPickerProps> = ({ onProductSelect, open, on
               <ListItem>
                 <ListItemIcon>
                   <Checkbox
-                    checked={product.variants.every(v => selectedVariants[v.id])}
-                    indeterminate={product.variants.some(v => selectedVariants[v.id]) && !product.variants.every(v => selectedVariants[v.id])}
-                    onChange={() => product.variants.forEach(v => handleVariantSelect(v.id))}
+                    checked={product.variants.every(
+                      (v) => selectedVariants[v.id]
+                    )}
+                    indeterminate={
+                      product.variants.some((v) => selectedVariants[v.id]) &&
+                      !product.variants.every((v) => selectedVariants[v.id])
+                    }
+                    onChange={() =>
+                      product.variants.forEach((v) => handleVariantSelect(v.id))
+                    }
                   />
                 </ListItemIcon>
                 <ListItemText primary={product.title} />
               </ListItem>
               <List component="div" disablePadding>
-                {product.variants.map((variant:any) => (
+                {product.variants.map((variant: any) => (
                   <ListItem key={variant.id} sx={{ pl: 4 }}>
                     <ListItemIcon>
                       <Checkbox
@@ -163,11 +154,15 @@ const ProductPicker: React.FC<ProductPickerProps> = ({ onProductSelect, open, on
                         onChange={() => handleVariantSelect(variant.id)}
                       />
                     </ListItemIcon>
-                    <ListItemText 
+                    <ListItemText
                       primary={variant.title}
                       secondary={
                         <React.Fragment>
-                          <Typography component="span" variant="body2" color="text.primary">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
                             {variant.inventory_quantity} available
                           </Typography>
                           {" — $" + variant.price}
@@ -183,9 +178,12 @@ const ProductPicker: React.FC<ProductPickerProps> = ({ onProductSelect, open, on
       </DialogContent>
       <DialogActions>
         <Box sx={{ mr: 2 }}>
-          {selectedCount} {selectedCount === 1 ? 'product' : 'products'} selected
+          {selectedCount} {selectedCount === 1 ? "product" : "products"}{" "}
+          selected
         </Box>
-        <Button onClick={onClose}  variant="outlined"  color="error">Cancel</Button>
+        <Button onClick={onClose} variant="outlined" color="error">
+          Cancel
+        </Button>
         <Button onClick={handleSubmit} color="success" variant="contained">
           Add
         </Button>
