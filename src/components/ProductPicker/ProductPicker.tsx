@@ -62,6 +62,66 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
 
   const apiKey = "72njgfa948d9aS7gs5";
   useEffect(() => {
+    const sampleProducts: Product[] = [
+      {
+        id: "77",
+        title: "Fog Linen Chambray Towel - Beige Stripe",
+        variants: [
+          {
+            id: "1",
+            product_id: "77",
+            title: "XS / Silver",
+            price: "49",
+            inventory_quantity: 0,
+          },
+          {
+            id: "2",
+            product_id: "77",
+            title: "S / Silver",
+            price: "49",
+            inventory_quantity: 0,
+          },
+          {
+            id: "3",
+            product_id: "77",
+            title: "M / Silver",
+            price: "49",
+            inventory_quantity: 0,
+          },
+        ],
+        image: {
+          id: "266",
+          product_id: "77",
+          src: "https://cdn11.bigcommerce.com/s-p1xcugzp89/products/77/images/266/foglinenbeigestripetowel1b.1647248662.386.513.jpg?c=1",
+        },
+        discount: 0,
+        discountType: "percentage",
+        price: undefined,
+        isDiscountEditing: false, // Add this field
+      },
+      {
+        id: "80",
+        title: "Orbit Terrarium - Large",
+        variants: [
+          {
+            id: "64",
+            product_id: "80",
+            title: "Default Title",
+            price: "109",
+            inventory_quantity: 0,
+          },
+        ],
+        image: {
+          id: "272",
+          product_id: "80",
+          src: "https://cdn11.bigcommerce.com/s-p1xcugzp89/products/80/images/272/roundterrariumlarge.1647248662.386.513.jpg?c=1",
+        },
+        discount: 0,
+        discountType: "percentage",
+        price: undefined,
+        isDiscountEditing: false, // Add this field
+      },
+    ];
     const fetchData = async () => {
       try {
         const response = await axios.get("/task/products/search", {
@@ -75,9 +135,12 @@ const ProductPicker: React.FC<ProductPickerProps> = ({
         if (response.status === 200) {
           console.log(response.data, "api data");
           setProducts(response.data);
+        } else {
+          setProducts(sampleProducts);
         }
       } catch (error) {
         console.error(error);
+        setProducts(sampleProducts);
       }
     };
     fetchData();
